@@ -5,7 +5,10 @@ const { PACKETS } = constants;
 const font = await jimp.loadFont("font.fnt");
 const sd = await openStreamDeck();
 
+let currentCarTelemetryData = undefined;
+
 const revLightsIndexOrder = [10, 5, 0, 1, 2, 3, 4, 9, 14];
+sd.clearPanel();
 
 const displayOnKey = async (keyIndex, image, text) => {
   image.print(
@@ -25,6 +28,7 @@ const displayOnKey = async (keyIndex, image, text) => {
 
 const client = new F1TelemetryClient({ port: 20777 });
 client.on(PACKETS.carTelemetry, async (packet) => {
+  currentCarTelemetryData = packet.m_carTelemetryData;
   const speedImage = await jimp.read("assets/SpeedBG.png");
   const gearImage = await jimp.read("assets/GearBG.png");
 
@@ -48,6 +52,32 @@ client.on(PACKETS.carTelemetry, async (packet) => {
     } else {
       sd.fillKeyColor(revLightsIndexOrder[i], 0, 0, 0);
     }
+  }
+});
+
+client.on(PACKETS.lapData, async (packet) => {
+  const lapImage = await jimp.read("assets/LapBG.png");
+  const deltaSecondsImage = await jimp.read("assets/GearBG.png");
+  const deltaMillisecondsImage = await jimp.read("assets/GearBG.png");
+
+  const lap = packet.m_lapData[0].m_currentLapNum;
+
+  displayOnKey(8, lapImage, lap);
+
+  if (packet.m_timeTrialPBCarIdx != 255) {
+    const deltaDistance =
+      packet.m_lapData[0].m_lapDistance -
+      packet.m_lapData[packet.m_timeTrialPBCarIdx].m_lapDistance;
+    const deltaTime =
+      deltaDistance / (currentCarTelemetryData[0].m_speed * 0.277778);
+    const displayDeltaTime = deltaTime.toFixed(3);
+    const [deltaSeconds, deltaMilliseconds] = `${displayDeltaTime}`.split(".");
+
+    displayOnKey(12, deltaSecondsImage, deltaSeconds);
+    displayOnKey(13, deltaMillisecondsImage, deltaMilliseconds);
+  } else {
+    displayOnKey(12, deltaSecondsImage, 0);
+    displayOnKey(13, deltaMillisecondsImage, 0);
   }
 });
 
