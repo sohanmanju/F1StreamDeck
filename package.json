@@ -1,14 +1,14 @@
 {
-  "name": "racedash",
+  "name": "f1streamdeck",
   "version": "1.0.0",
   "description": "Show Race Telemetry Data on Stream Deck",
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Sohan Manju <sohan@sohanmanju.com>",
+  "license": "MIT",
   "dependencies": {
     "@elgato-stream-deck/node": "^5.7.0",
     "@racehub-io/f1-telemetry-client": "^0.2.9",
