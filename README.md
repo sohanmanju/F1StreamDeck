@@ -1,6 +1,6 @@
 # Play F1 with integration to your Stream Deck
 
-==
+---
 
 ## Usage
 
