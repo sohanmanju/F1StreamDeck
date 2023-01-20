@@ -1,4 +1,4 @@
-# Play F1 with integration to your Stream Deck
+# F1 MFD integration for Elgato Stream Deck 🏎️
 
 ---
 
@@ -9,4 +9,5 @@
 2. Run `npm i`
 3. Run `npm run start`
 4. Play F1
-5. Look at those fancy-ass lights
+5. Make sure UDP Telemetry is turned on in the game settings
+6. Look at those fancy rev lights and other data.
